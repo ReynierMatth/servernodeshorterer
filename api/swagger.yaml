@@ -1,0 +1,115 @@
+---
+swagger: "2.0"
+info:
+  description: "Hola"
+  version: "1.0.0"
+  title: "Swagger UrlSHorter"
+  termsOfService: "http://swagger.io/terms/"
+  contact:
+    email: "apiteam@swagger.io"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: "ec2-63-32-7-190.eu-west-1.compute.amazonaws.com"
+basePath: "/v2"
+tags:
+- name: "url"
+  description: "Everything about your url"
+schemes:
+- "https"
+- "http"
+paths:
+  /url:
+    get:
+      tags:
+      - "url"
+      summary: "Finds url by name"
+      description: "find url by name"
+      operationId: "findUrl"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "name"
+        in: "query"
+        description: "Url values"
+        required: true
+        type: "array"
+        items:
+          type: "string"
+        collectionFormat: "multi"
+      security:
+      - url_auth:
+        - "write:urls"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Url"
+        "400":
+          description: "Invalid status value"
+      x-swagger-router-controller: "Url"
+    post:
+      tags:
+      - "url"
+      summary: "Add a new url "
+      description: ""
+      operationId: "addUrl"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Url object that needs to be added"
+        required: true
+        schema:
+          $ref: "#/definitions/Url"
+      security:
+      - url_auth:
+        - "write:urls"
+        - "read:urls"
+      responses:
+        "405":
+          description: "Invalid input"
+      x-swagger-router-controller: "Url"
+securityDefinitions:
+  url_auth:
+    type: "oauth2"
+    authorizationUrl: "http://petstore.swagger.io/oauth/dialog"
+    flow: "implicit"
+    scopes:
+      write:urls: "modify urls in your account"
+      read:urls: "read your urls"
+  api_key:
+    type: "apiKey"
+    name: "api_key"
+    in: "header"
+definitions:
+  Url:
+    type: "object"
+    required:
+    - "name"
+    properties:
+      name:
+        type: "string"
+        example: "doggie.com"
+    xml:
+      name: "url"
+    example:
+      name: "doggie.com"
+  ApiResponse:
+    type: "object"
+    properties:
+      code:
+        type: "integer"
+        format: "int32"
+      type:
+        type: "string"
+      message:
+        type: "string"
