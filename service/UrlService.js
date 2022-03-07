@@ -2,8 +2,8 @@
 
 
 /**
- * Add a new url 
- * 
+ * Add a new url
+ *
  *
  * body Url Url object that needs to be added
  * no response value expected for this operation
@@ -19,10 +19,10 @@ exports.addUrl = function(body) {
  * Finds url by name
  * find url by name
  *
- * name List Url values
+ * url List Url values
  * returns List
  **/
-exports.findUrl = function(name) {
+exports.findUrl = function(url) {
   return new Promise(function(resolve, reject) {
     var examples = {};
     examples['application/json'] = {};
